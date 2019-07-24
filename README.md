@@ -3,6 +3,6 @@ Creating a single HTML page that contains the whole thread's pages in the Otzar 
 
 Actually the newer versions of the phpBB do contain the ability to print all the thread's pages, unfortunately, Otzar Ha'choch'ma doesn't update their phpBB version.
 
-To use it: just make a JAR file from it, and then execute it via the CLI with two parameters, first is the thread number on Otzar Ha'choch'ma forum, and the 2nd the filename of the output page (that will contain all the thread's pages). 
+To use it: Execute _otzar.exe_ (you can download it via _releases_ section) in the CLI with two parameters, first is the thread number on Otzar Ha'choch'ma forum, and the 2nd is the filename of the output page (that will contain all the thread's pages). 
 
-![image](https://user-images.githubusercontent.com/42445612/61794040-07d80300-ae29-11e9-8c33-b234d9b5c278.png)
+![image](https://user-images.githubusercontent.com/42445612/61799158-470b5180-ae33-11e9-9089-2a2ee0abae38.png)
