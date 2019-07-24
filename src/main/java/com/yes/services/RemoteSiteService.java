@@ -3,21 +3,25 @@ package com.yes.services;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 
 
-public class remoteSiteService {
-    final String OTZAR_URL_PREFIX = "https://forum.otzar" +
+public class RemoteSiteService {
+    private final String OTZAR_URL_PREFIX = "https://forum" +
+            ".otzar" +
             ".org/viewtopic" +
             ".php?f=190&t=";
-    final String OTZAR_URL_POSTFIX = "&view=print";
+    private final String OTZAR_URL_POSTFIX = "&view=print";
 
-    public void grabTheClusterToFile(int cluster,
-                                     String fileName) {
-        String firstPage = getAllPages(cluster);
+    public void grabTheThreadToFile(int thread,
+                                    String fileName) {
+        String firstPage = getAllPages(thread);
         saveToHtmlFile(fileName, firstPage);
     }
 
@@ -41,14 +45,14 @@ public class remoteSiteService {
 
     }
 
-    private String getAllPages(int cluster) {
+    private String getAllPages(int thread) {
         StringBuilder allPages = new StringBuilder();
-        Document firstPage = getOnePage(cluster, 0);
+        Document firstPage = getOnePage(thread, 0);
         int pagesAmount = Integer.valueOf(firstPage.selectFirst("div" +
                 ".page-number").getAllElements().get(2).text());
         allPages.append(firstPage.outerHtml());
         for (int page = 1; page < pagesAmount; page++) {
-            Document tempPage = getOnePage(cluster, page * 40);
+            Document tempPage = getOnePage(thread, page * 40);
             tempPage.select("div#page-header").remove();
             allPages.append(tempPage);
         }
@@ -56,11 +60,11 @@ public class remoteSiteService {
         return allPages.toString();
     }
 
-    private Document getOnePage(int cluster, int startMessage) {
-        String clusterAddress =
-                MessageFormat.format("{0}{1}&start={2}{3}", OTZAR_URL_PREFIX, String.valueOf(cluster), String.valueOf(startMessage), OTZAR_URL_POSTFIX);
+    private Document getOnePage(int thread, int startMessage) {
+        String threadAddress =
+                MessageFormat.format("{0}{1}&start={2}{3}", OTZAR_URL_PREFIX, String.valueOf(thread), String.valueOf(startMessage), OTZAR_URL_POSTFIX);
         try {
-            Document doc = Jsoup.connect(clusterAddress).get();
+            Document doc = Jsoup.connect(threadAddress).get();
             doc.charset(Charset.forName("UTF-8"));
             return doc;
         } catch (IOException e) {
