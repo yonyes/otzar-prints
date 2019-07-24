@@ -13,11 +13,11 @@ import java.text.MessageFormat;
 
 
 public class RemoteSiteService {
-    private final String OTZAR_URL_PREFIX = "https://forum" +
+    private static final String OTZAR_URL_PREFIX = "https://forum" +
             ".otzar" +
             ".org/viewtopic" +
             ".php?f=190&t=";
-    private final String OTZAR_URL_POSTFIX = "&view=print";
+    private static final String OTZAR_URL_POSTFIX = "&view=print";
 
     public void grabTheThreadToFile(int thread,
                                     String fileName) {
@@ -28,27 +28,20 @@ public class RemoteSiteService {
 
     private void saveToHtmlFile(String fileName, String html) {
         System.out.println(html);
-        BufferedWriter bw =
-                null;
         try {
-            bw = new BufferedWriter
+            BufferedWriter bw = new BufferedWriter
                     (new OutputStreamWriter(new FileOutputStream(fileName+".html"), StandardCharsets.UTF_8));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
             bw.write(html);
             bw.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private String getAllPages(int thread) {
         StringBuilder allPages = new StringBuilder();
         Document firstPage = getOnePage(thread, 0);
-        int pagesAmount = Integer.valueOf(firstPage.selectFirst("div" +
+        int pagesAmount = Integer.parseInt(firstPage.selectFirst("div" +
                 ".page-number").getAllElements().get(2).text());
         allPages.append(firstPage.outerHtml());
         for (int page = 1; page < pagesAmount; page++) {
