@@ -28,7 +28,6 @@ public class RemoteSiteService {
 
 
     private void saveToHtmlFile(String fileName, String html) {
-        System.out.println(html);
         try {
             BufferedWriter bw = new BufferedWriter
                     (new OutputStreamWriter(new FileOutputStream(fileName+".html"), StandardCharsets.UTF_8));
@@ -41,11 +40,15 @@ public class RemoteSiteService {
 
     private String getAllPages(int thread) {
         StringBuilder allPages = new StringBuilder();
+        System.out.println("start working on the first page");
         Document firstPage = getSinglePage(thread, 0);
         int pagesAmount = Integer.parseInt(firstPage.selectFirst("div" +
                 ".page-number").getAllElements().get(2).text());
         allPages.append(firstPage.outerHtml());
+
         for (int page = 1; page < pagesAmount; page++) {
+            System.out.printf("Now working on page: %s%n",
+                    (page + 1));
             Document tempPage = getSinglePage(thread, page);
             tempPage.select("div#page-header").remove();
             allPages.append(tempPage);
