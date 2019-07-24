@@ -1,5 +1,5 @@
 # otzar-prints
-Creating one HTML page that contains the whole thread's page in the Otzar Ha'choch'ma forum (it's a phpBB based forum) in the goal of enabling print it in once.
+Creating one HTML page that contains the whole thread's pages in the Otzar Ha'choch'ma forum (it's a phpBB based forum) in the goal of enabling print it in once.
 
 Actually the newer versions of the phpBB do contain the ability to print all the thread's pages, unfortunately, Otzar Ha'choch'ma doesn't update their phpBB version.
 
