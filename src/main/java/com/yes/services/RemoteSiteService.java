@@ -18,6 +18,7 @@ public class RemoteSiteService {
             ".org/viewtopic" +
             ".php?f=190&t=";
     private static final String OTZAR_URL_POSTFIX = "&view=print";
+    private static final int COMMENTS_PER_PAGE = 40;
 
     public void grabTheThreadToFile(int thread,
                                     String fileName) {
@@ -40,12 +41,12 @@ public class RemoteSiteService {
 
     private String getAllPages(int thread) {
         StringBuilder allPages = new StringBuilder();
-        Document firstPage = getOnePage(thread, 0);
+        Document firstPage = getSinglePage(thread, 0);
         int pagesAmount = Integer.parseInt(firstPage.selectFirst("div" +
                 ".page-number").getAllElements().get(2).text());
         allPages.append(firstPage.outerHtml());
         for (int page = 1; page < pagesAmount; page++) {
-            Document tempPage = getOnePage(thread, page * 40);
+            Document tempPage = getSinglePage(thread, page);
             tempPage.select("div#page-header").remove();
             allPages.append(tempPage);
         }
@@ -53,9 +54,13 @@ public class RemoteSiteService {
         return allPages.toString();
     }
 
-    private Document getOnePage(int thread, int startMessage) {
+    private Document getSinglePage(int thread, int pageNumber) {
         String threadAddress =
-                MessageFormat.format("{0}{1}&start={2}{3}", OTZAR_URL_PREFIX, String.valueOf(thread), String.valueOf(startMessage), OTZAR_URL_POSTFIX);
+                MessageFormat.format("{0}{1}&start={2}{3}",
+                        OTZAR_URL_PREFIX,
+                        String.valueOf(thread),
+                        String.valueOf(pageNumber * COMMENTS_PER_PAGE),
+                        OTZAR_URL_POSTFIX);
         try {
             Document doc = Jsoup.connect(threadAddress).get();
             doc.charset(Charset.forName("UTF-8"));
